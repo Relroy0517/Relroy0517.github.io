@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>企业风险事件分析报告</title>
+    <!-- TailwindCSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Framer Motion CDN -->
+    <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.min.js"></script>
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #000000;
+            color: #ffffff;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            grid-auto-rows: minmax(200px, auto);
+            gap: 20px;
+            padding: 40px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        .grid-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid rgba(227, 25, 55, 0.3);
+            backdrop-filter: blur(10px);
+        }
+        .highlight-red {
+            color: #E31937;
+        }
+        .gradient-red {
+            background: linear-gradient(135deg, #E31937 0%, rgba(227, 25, 55, 0.1) 100%);
+        }
+        .chart-container {
+            position: relative;
+            height: 100%;
+            width: 100%;
+        }
+        .bar-chart {
+            display: flex;
+            align-items: end;
+            height: 200px;
+            gap: 12px;
+        }
+        .bar {
+            background: linear-gradient(to top, #E31937, rgba(227, 25, 55, 0.5));
+            border-radius: 4px 4px 0 0;
+            min-width: 20px;
+        }
+        .pie-chart {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: conic-gradient(
+                #E31937 0% 25%,
+                rgba(227, 25, 55, 0.7) 25% 45%,
+                rgba(227, 25, 55, 0.5) 45% 65%,
+                rgba(227, 25, 55, 0.3) 65% 85%,
+                rgba(227, 25, 55, 0.1) 85% 100%
+            );
+        }
+        .word-cloud {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+        .word {
+            padding: 4px 12px;
+            border-radius: 20px;
+            background: rgba(227, 25, 55, 0.2);
+            border: 1px solid rgba(227, 25, 55, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="bento-grid">
+        <!-- 标题区域 -->
+        <div class="grid-item col-span-12 row-span-1 gradient-red rounded-2xl">
+            <div class="text-center py-8">
+                <h1 class="text-5xl font-bold mb-4">企业风险事件深度分析报告</h1>
+                <p class="text-xl text-gray-300">基于近期重大风险事件的综合评估与趋势分析</p>
+            </div>
+        </div>
+
+        <!-- 风险概览 -->
+        <div class="grid-item col-span-4 row-span-2">
+            <div class="flex items-center mb-6">
+                <i class="fas fa-exclamation-triangle text-2xl highlight-red mr-3"></i>
+                <h2 class="text-2xl font-bold">风险事件概览</h2>
+            </div>
+            <div class="space-y-4">
+                <div class="flex justify-between items-center">
+                    <span class="text-gray-400">高风险事件数量</span>
+                    <span class="text-3xl font-bold highlight-red">11</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-gray-400">涉及行业数量</span>
+                    <span class="text-3xl font-bold highlight-red">8</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-gray-400">平均风险评分</span>
+                    <span class="text-3xl font-bold highlight-red">5.0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 行业分布饼图 -->
+        <div class="grid-item col-span-4 row-span-2">
+            <div class="flex items-center mb-6">
+                <i class="fas fa-chart-pie text-2xl highlight-red mr-3"></i>
+                <h2 class="text-2xl font-bold">行业风险分布</h2>
+            </div>
+            <div class="flex justify-center items-center h-48">
+                <div class="pie-chart"></div>
+            </div>
+            <div class="grid grid-cols-2 gap-2 mt-4 text-sm">
+                <div class="flex items-center">
+                    <div class="w-3 h-3 bg-[#E31937] rounded mr-2"></div>
+                    <span>能源电力 25%</span>
+                </div>
+                <div class="flex items-center">
+                    <div class="w-3 h-3 bg-[rgba(227,25,55,0.7)] rounded mr-2"></div>
+                    <span>钢铁冶金 20%</span>
+                </div>
+                <div class="flex items-center">
+                    <div class="w-3 h-3 bg-[rgba(227,25,55,0.5)] rounded mr-2"></div>
+                    <span>石油化工 20%</span>
+                </div>
+                <div class="flex items-center">
+                    <div class="w-3 h-3 bg-[rgba(227,25,55,0.3)] rounded mr-2"></div>
+                    <span>煤炭矿业 15%</span>
+                </div>
+                <div class="flex items-center">
+                    <div class="w-3 h-3 bg-[rgba(227,25,55,0.1)] rounded mr-2"></div>
+                    <span>其他行业 20%</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 风险类型分析 -->
+        <div class="grid-item col-span-4 row-span-2">
+            <div class="flex items-center mb-6">
+                <i class="fas fa-shield-alt text-2xl highlight-red mr-3"></i>
+                <h2 class="text-2xl font-bold">风险类型分析</h2>
+            </div>
+            <div class="bar-chart">
+                <div class="bar" style="height: 180px;">
+                    <div class="text-center text-xs mt-2">贪腐</div>
+                </div>
+                <div class="bar" style="height: 160px;">
+                    <div class="text-center text-xs mt-2">安全</div>
+                </div>
+                <div class="bar" style="height: 140px;">
+                    <div class="text-center text-xs mt-2">环保</div>
+                </div>
+                <div class="bar" style="height: 120px;">
+                    <div class="text-center text-xs mt-2">质量</div>
+                </div>
+                <div class="bar" style="height: 100px;">
+                    <div class="text-center text-xs mt-2">其他</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 词云分析 -->
+        <div class="grid-item col-span-6 row-span-2">
+            <div class="flex items-center mb-6">
+                <i class="fas fa-cloud text-2xl highlight-red mr-3"></i>
+                <h2 class="text-2xl font-bold">关键词词云分析</h2>
+            </div>
+            <div class="word-cloud">
+                <span class="word text-lg">骗补</span>
+                <span class="word text-xl">安全事故</span>
+                <span class="word text-2xl">数据造假</span>
+                <span class="word text-lg">环保违规</span>
+                <span class="word text-xl">贪腐</span>
+                <span class="word text-lg">质量缺陷</span>
+                <span class="word text-xl">政企勾结</span>
+                <span class="word text-lg">暴力冲突</span>
+                <span class="word text-xl">公共卫生</span>
+                <span class="word text-lg">劳资纠纷</span>
+            </div>
+        </div>
+
+        <!-- 时间趋势分析 -->
+        <div class="grid-item col-span-6 row-span-2">
+            <div class="flex items-center mb-6">
+                <i class="fas fa-chart-line text-2xl highlight-red mr-3"></i>
+                <h2 class="text-2xl font-bold">风险事件时间趋势</h2>
+            </div>
+            <div class="chart-container">
+                <div class="relative h-48">
+                    <div class="absolute bottom-0 left-0 right-0 h-px bg-gray-600"></div>
+                    <div class="absolute left-0 top-0 bottom-0 w-px bg-gray-600"></div>
+                    
+                    <div class="absolute" style="left: 10%; bottom: 30%; width: 20px; height: 60px; background: #E31937;"></div>
+                    <div class="absolute" style="left: 25%; bottom: 50%; width: 20px; height: 80px; background: #E31937;"></div>
+                    <div class="absolute" style="left: 40%; bottom: 70%; width: 20px; height: 100px; background: #E31937;"></div>
+                    <div class="absolute" style="left: 55%; bottom: 60%; width: 20px; height: 90px; background: #E31937;"></div>
+                    <div class="absolute" style="left: 70%; bottom: 80%; width: 20px; height: 110px; background: #E31937;"></div>
+                    <div class="absolute" style="left: 85%; bottom: 90%; width: 20px; height: 120px; background: #E31937;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 详细事件列表 -->
+        <div class="grid-item col-span-12 row-span-3">
+            <div class="flex items-center mb-6">
+                <i class="fas fa-list-alt text-2xl highlight-red mr-3"></i>
+                <h2 class="text-2xl font-bold">重大风险事件详情</h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="p-4 border border-red-800 rounded-lg">
+                    <h3 class="text-lg font-semibold highlight-red mb-2">沙漠光伏基地骗补及安全事故事件</h3>
+                    <p class="text-sm text-gray-300">虚报发电量骗补，储能设备安全隐患导致火灾，涉及多重违规问题</p>
+                    <div class="flex justify-between items-center mt-3">
+                        <span class="text-red-400">风险评分: 5</span>
+                        <span class="text-gray-400">中国电力报</span>
+                    </div>
+                </div>
+                
+                <div class="p-4 border border-red-800 rounded-lg">
+                    <h3 class="text-lg font-semibold highlight-red mb-2">宝武钢铁碳排放造假事件</h3>
+                    <p class="text-sm text-gray-300">虚报碳减排数据，转移废气致周边污染，村民呼吸道疾病激增</p>
+                    <div class="flex justify-between items-center mt-3">
+                        <span class="text-red-400">风险评分: 5</span>
+                        <span class="text-gray-400">中国冶金报</span>
+                    </div>
+                </div>
+
+                <div class="p-4 border border-red-800 rounded-lg">
+                    <h3 class="text-lg font-semibold highlight-red mb-2">东营石化园区环保造假事件</h3>
+                    <p class="text-sm text-gray-300">夜间偷排废气，居民举报遭压制，记者阻拦，政企勾结</p>
+                    <div class="flex justify-between items-center mt-3">
+                        <span class="text-red-400">风险评分: 5</span>
+                        <span class="text-gray-400">中国化工报</span>
+                    </div>
+                </div>
+
+                <div class="p-4 border border-red-800 rounded-lg">
+                    <h3 class="text-lg font-semibold highlight-red mb-2">山西焦煤集团煤矿透水事故</h3>
+                    <p class="text-sm text-gray-300">设备未调试强行投产，5矿工被困，引发家属维权</p>
+                    <div class="flex justify-between items-center mt-3">
+                        <span class="text-red-400">风险评分: 5</span>
+                        <span class="text-gray-400">中国煤炭报</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 风险应对建议 -->
+        <div class="grid-item col-span-6 row-span-2">
+            <div class="flex items-center mb-6">
+                <i class="fas fa-lightbulb text-2xl highlight-red mr-3"></i>
+                <h2 class="text-2xl font-bold">风险应对建议</h2>
+            </div>
+            <div class="space-y-4">
+                <div class="flex items-start">
+                    <i class="fas fa-check-circle highlight-red mt-1 mr-3"></i>
+                    <div>
+                        <h4 class="font-semibold">加强监管审查</h4>
+                        <p class="text-sm text-gray-300">建立多层次监管体系，防止数据造假和骗补行为</p>
+                    </div>
+                </div>
+                <div class="flex items-start">
+                    <i class="fas fa-check-circle highlight-red mt-1 mr-3"></i>
+                    <div>
+                        <h4 class="font-semibold">完善安全标准</h4>
+                        <p class="text-sm text-gray-300">制定严格的安全操作规程，避免安全事故发生</p>
+                    </div>
+                </div>
+                <div class="flex items-start">
+                    <i class="fas fa-check-circle highlight-red mt-1 mr-3"></i>
+                    <div>
+                        <h4 class="font-semibold">透明化运营</h4>
+                        <p class="text-sm text-gray-300">提高企业运营透明度，接受社会监督</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 总结统计 -->
+        <div class="grid-item col-span-6 row-span-2 gradient-red">
+            <div class="flex items-center mb-6">
+                <i class="fas fa-chart-bar text-2xl text-white mr-3"></i>
+                <h2 class="text-2xl font-bold text-white">综合分析总结</h2>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <div class="text-center">
+                    <div class="text-4xl font-bold text-white">45%</div>
+                    <div class="text-sm text-gray-200">涉及贪腐问题</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl font-bold text-white">36%</div>
+                    <div class="text-sm text-gray-200">涉及安全问题</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl font-bold text-white">27%</div>
+                    <div class="text-sm text-gray-200">涉及环保问题</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl font-bold text-white">18%</div>
+                    <div class="text-sm text-gray-200">涉及质量问题</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 使用Framer Motion实现滚动动画
+        document.addEventListener('DOMContentLoaded', function() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = 1;
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+
+            // 为所有网格项添加动画
+            document.querySelectorAll('.grid-item').forEach(item => {
+                item.style.opacity = 0;
+                item.style.transform = 'translateY(50px)';
+                item.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
+                observer.observe(item);
+            });
+        });
+    </script>
+</body>
+</html>
