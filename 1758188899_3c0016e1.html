@@ -1,0 +1,357 @@
+# 企业风险事件分析报告 - 可视化仪表板
+
+下面是一个基于您提供的数据创建的企业风险事件分析可视化页面，采用Bento Grid布局和Apple风格的动画效果：
+
+```html
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>企业风险事件分析报告</title>
+    <!-- TailwindCSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Framer Motion CDN -->
+    <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.min.js"></script>
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'tesla-red': '#E31937',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #000000;
+            color: #FFFFFF;
+            scroll-behavior: smooth;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(227, 25, 55, 0.2);
+        }
+        
+        .gradient-red {
+            background: linear-gradient(135deg, #E31937 0%, rgba(227, 25, 55, 0.1) 100%);
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 100%;
+            width: 100%;
+        }
+        
+        .bar {
+            background: linear-gradient(to top, #E31937, rgba(227, 25, 55, 0.6));
+            border-radius: 4px 4px 0 0;
+            transition: height 1.5s ease-out;
+        }
+        
+        .pie-slice {
+            transform-origin: center;
+            transition: transform 0.5s ease;
+        }
+        
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 1s ease, transform 1s ease;
+        }
+        
+        .animate-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* 自定义滚动条 */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #0a0a0a;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #E31937;
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #ff2b4a;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-black text-white overflow-x-hidden">
+    <!-- 导航栏 -->
+    <nav class="fixed top-0 w-full bg-black bg-opacity-80 backdrop-blur-md z-50 py-4 px-8 border-b border-gray-800">
+        <div class="flex justify-between items-center">
+            <div class="text-xl font-bold text-tesla-red">风险分析<span class="text-white">仪表板</span></div>
+            <div class="flex space-x-6">
+                <a href="#overview" class="hover:text-tesla-red transition-colors">概览</a>
+                <a href="#events" class="hover:text-tesla-red transition-colors">事件分析</a>
+                <a href="#trends" class="hover:text-tesla-red transition-colors">趋势分析</a>
+                <a href="#breakdown" class="hover:text-tesla-red transition-colors">分类统计</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主内容区 -->
+    <main class="pt-24 pb-16 px-8 max-w-7xl mx-auto">
+        <!-- 标题区域 -->
+        <section class="mb-16 text-center">
+            <h1 class="text-5xl md:text-6xl font-bold mb-6">企业风险事件<span class="text-tesla-red">分析报告</span></h1>
+            <p class="text-xl text-gray-400 max-w-3xl mx-auto">基于多行业风险事件数据的深度分析与可视化呈现，揭示企业运营中的潜在风险点与趋势</p>
+        </section>
+
+        <!-- 概览数据卡片区 -->
+        <section id="overview" class="mb-20">
+            <h2 class="text-3xl font-bold mb-8 text-center">风险事件<span class="text-tesla-red">概览</span></h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                <!-- 总事件数卡片 -->
+                <div class="card p-6 text-center animate-on-scroll">
+                    <div class="text-5xl font-bold text-tesla-red mb-2">11</div>
+                    <div class="text-gray-400">风险事件总数</div>
+                    <div class="mt-4 h-1 bg-gradient-to-r from-tesla-red to-transparent rounded-full"></div>
+                </div>
+                
+                <!-- 高风险事件卡片 -->
+                <div class="card p-6 text-center animate-on-scroll">
+                    <div class="text-5xl font-bold text-tesla-red mb-2">11</div>
+                    <div class="text-gray-400">高风险事件</div>
+                    <div class="mt-4 h-1 bg-gradient-to-r from-tesla-red to-transparent rounded-full"></div>
+                </div>
+                
+                <!-- 涉及行业卡片 -->
+                <div class="card p-6 text-center animate-on-scroll">
+                    <div class="text-5xl font-bold text-tesla-red mb-2">9</div>
+                    <div class="text-gray-400">涉及行业</div>
+                    <div class="mt-4 h-1 bg-gradient-to-r from-tesla-red to-transparent rounded-full"></div>
+                </div>
+                
+                <!-- 平均风险分卡片 -->
+                <div class="card p-6 text-center animate-on-scroll">
+                    <div class="text-5xl font-bold text-tesla-red mb-2">5.0</div>
+                    <div class="text-gray-400">平均风险评分</div>
+                    <div class="mt-4 h-1 bg-gradient-to-r from-tesla-red to-transparent rounded-full"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 事件类型分析区 -->
+        <section id="events" class="mb-20">
+            <h2 class="text-3xl font-bold mb-8 text-center">事件类型<span class="text-tesla-red">分析</span></h2>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+                <!-- 事件类型饼图 -->
+                <div class="card p-6 animate-on-scroll">
+                    <h3 class="text-xl font-semibold mb-6 flex items-center">
+                        <i class="fas fa-chart-pie text-tesla-red mr-3"></i>事件类型分布
+                    </h3>
+                    <div class="chart-container" style="height: 300px;">
+                        <canvas id="eventTypeChart"></canvas>
+                    </div>
+                </div>
+                
+                <!-- 风险等级分布 -->
+                <div class="card p-6 animate-on-scroll">
+                    <h3 class="text-xl font-semibold mb-6 flex items-center">
+                        <i class="fas fa-exclamation-triangle text-tesla-red mr-3"></i>风险等级分布
+                    </h3>
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span>5级风险</span>
+                                <span class="text-tesla-red font-bold">100%</span>
+                            </div>
+                            <div class="w-full bg-gray-800 rounded-full h-2.5">
+                                <div class="bg-tesla-red h-2.5 rounded-full" style="width: 100%"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span>涉及公共安全</span>
+                                <span class="text-tesla-red font-bold">63.6%</span>
+                            </div>
+                            <div class="w-full bg-gray-800 rounded-full h-2.5">
+                                <div class="bg-tesla-red h-2.5 rounded-full" style="width: 63.6%"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span>涉及政策敏感</span>
+                                <span class="text-tesla-red font-bold">72.7%</span>
+                            </div>
+                            <div class="w-full bg-gray-800 rounded-full h-2.5">
+                                <div class="bg-tesla-red h-2.5 rounded-full" style="width: 72.7%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 行业分布分析 -->
+        <section class="mb-20">
+            <h2 class="text-3xl font-bold mb-8 text-center">行业风险<span class="text-tesla-red">分布</span></h2>
+            
+            <div class="card p-6 mb-8 animate-on-scroll">
+                <h3 class="text-xl font-semibold mb-6 flex items-center">
+                    <i class="fas fa-industry text-tesla-red mr-3"></i>各行业风险事件数量
+                </h3>
+                <div class="chart-container" style="height: 400px;">
+                    <canvas id="industryChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- 详细事件列表 -->
+        <section class="mb-20">
+            <h2 class="text-3xl font-bold mb-8 text-center">风险事件<span class="text-tesla-red">详情</span></h2>
+            
+            <div class="grid grid-cols-1 gap-6">
+                <!-- 事件卡片模板 -->
+                <div class="card p-6 animate-on-scroll">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="text-xl font-semibold text-tesla-red">沙漠光伏基地骗补及安全事故事件</h3>
+                        <span class="px-3 py-1 bg-tesla-red bg-opacity-20 text-tesla-red rounded-full text-sm">风险等级: 5</span>
+                    </div>
+                    <p class="text-gray-300 mb-4">沙漠光伏基地虚报发电量并涉嫌骗补，储能设备存在安全隐患致火灾</p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="px-2 py-1 bg-gray-800 rounded text-sm">公共安全事件-火灾爆炸</span>
+                        <span class="px-2 py-1 bg-gray-800 rounded text-sm">政策敏感事件-官员贪腐</span>
+                        <span class="px-2 py-1 bg-gray-800 rounded text-sm">公共安全事件-抢劫诈骗</span>
+                    </div>
+                    <div class="text-sm text-gray-500">报送来源: 中国电力报</div>
+                </div>
+                
+                <div class="card p-6 animate-on-scroll">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="text-xl font-semibold text-tesla-red">宝武钢铁碳排放造假事件</h3>
+                        <span class="px-3 py-1 bg-tesla-red bg-opacity-20 text-tesla-red rounded-full text-sm">风险等级: 5</span>
+                    </div>
+                    <p class="text-gray-300 mb-4">宝武钢铁被指虚报碳减排数据并转移废气致周边村庄污染，村民患呼吸道疾病激增</p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="px-2 py-1 bg-gray-800 rounded text-sm">公共安全事件-公共卫生</span>
+                        <span class="px-2 py-1 bg-gray-800 rounded text-sm">政策敏感事件-政策争议</span>
+                    </div>
+                    <div class="text-sm text-gray-500">报送来源: 中国冶金报</div>
+                </div>
+                
+                <div class="card p-6 animate-on-scroll">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="text-xl font-semibold text-tesla-red">东营石化园区环保造假事件</h3>
+                        <span class="px-3 py-1 bg-tesla-red bg-opacity-20 text-tesla-red rounded-full text-sm">风险等级: 5</span>
+                    </div>
+                    <p class="text-gray-300 mb-4">东营石化园区企业夜间偷排废气，居民举报遭压制，记者遭阻拦，曝出政企勾结</p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="px-2 py-1 bg-gray-800 rounded text-sm">公共安全事件-暴力冲突</span>
+                        <span class="px-2 py-1 bg-gray-800 rounded text-sm">政策敏感事件-官员贪腐</span>
+                        <span class="px-2 py-1 bg-gray-800 rounded text-sm">政策敏感事件-政策争议</span>
+                    </div>
+                    <div class="text-sm text-gray-500">报送来源: 中国化工报</div>
+                </div>
+                
+                <!-- 更多事件卡片... -->
+            </div>
+        </section>
+
+        <!-- 趋势分析与总结 -->
+        <section class="mb-20">
+            <h2 class="text-3xl font-bold mb-8 text-center">风险趋势<span class="text-tesla-red">分析</span></h2>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="card p-6 animate-on-scroll">
+                    <h3 class="text-xl font-semibold mb-6 flex items-center">
+                        <i class="fas fa-chart-line text-tesla-red mr-3"></i>风险趋势月度分布
+                    </h3>
+                    <div class="chart-container" style="height: 300px;">
+                        <canvas id="trendChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="card p-6 animate-on-scroll">
+                    <h3 class="text-xl font-semibold mb-4 flex items-center">
+                        <i class="fas fa-lightbulb text-tesla-red mr-3"></i>核心洞察
+                    </h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <i class="fas fa-arrow-right text-tesla-red mt-1 mr-3"></i>
+                            <span>所有事件均为<strong class="text-tesla-red">最高风险等级(5级)</strong>，表明系统性风险突出</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-arrow-right text-tesla-red mt-1 mr-3"></i>
+                            <span><strong class="text-tesla-red">72.7%</strong>的事件涉及政策敏感问题，显示监管执行存在漏洞</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-arrow-right text-tesla-red mt-1 mr-3"></i>
+                            <span><strong class="text-tesla-red">能源、制造和重工业</strong>是风险高发领域，需加强合规管理</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-arrow-right text-tesla-red mt-1 mr-3"></i>
+                            <span>数据造假、环保违规和安全事故是<strong class="text-tesla-red">三大主要风险类型</strong></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="bg-black border-t border-gray-800 py-8 px-8">
+        <div class="max-w-7xl mx-auto text-center text-gray-500">
+            <p>企业风险事件分析报告 © 2023 - 数据可视化仪表板</p>
+            <p class="mt-2 text-sm">数据来源: 各行业权威媒体报道与风险事件报送系统</p>
+        </div>
+    </footer>
+
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <script>
+        // 滚动动画效果
+        document.addEventListener('DOMContentLoaded', function() {
+            const animatedElements = document.querySelectorAll('.animate-on-scroll');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            animatedElements.forEach(element => {
+                observer.observe(element);
+            });
+            
+            // 初始化图表
+            initCharts();
+        });
+        
+        // 图表初始化
+        function initCharts() {
+            // 事件类型分布饼图
+            const eventTypeCtx = document.getElementById('eventTypeChart').getContext('2
