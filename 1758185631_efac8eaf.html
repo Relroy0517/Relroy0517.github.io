@@ -1,0 +1,397 @@
+# 舆论分析仪表盘 - 纯舆论分析平台
+
+基于您提供的舆论数据，我设计了一个专业的舆论分析仪表盘，采用特斯拉红与黑色主题，Bento Grid布局，并包含多种可视化组件。
+
+```html
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>舆论分析仪表盘</title>
+    <!-- TailwindCSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Framer Motion -->
+    <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.js"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'tesla-red': '#E31937',
+                        'dark-bg': '#000000',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #000000;
+            color: white;
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+        }
+        
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            grid-auto-rows: minmax(180px, auto);
+            gap: 20px;
+            padding: 20px;
+        }
+        
+        .card {
+            background: rgba(30, 30, 30, 0.8);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(227, 25, 55, 0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .gradient-border {
+            position: relative;
+        }
+        
+        .gradient-border::before {
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: -1px;
+            right: -1px;
+            bottom: -1px;
+            background: linear-gradient(45deg, #E31937, transparent);
+            border-radius: 12px;
+            z-index: -1;
+        }
+        
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        
+        .visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .word-cloud {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            padding: 10px;
+        }
+        
+        .word {
+            padding: 4px 8px;
+            border-radius: 16px;
+            background: rgba(227, 25, 55, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .word:hover {
+            background: rgba(227, 25, 55, 0.4);
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-dark-bg text-white">
+    <header class="py-6 px-8 border-b border-gray-800 flex justify-between items-center">
+        <div class="flex items-center">
+            <div class="w-10 h-10 rounded-full bg-tesla-red mr-3"></div>
+            <h1 class="text-2xl font-bold">舆论分析仪表盘</h1>
+        </div>
+        <div class="flex space-x-4">
+            <button class="px-4 py-2 bg-tesla-red rounded-lg hover:bg-red-700 transition">
+                <i class="fas fa-upload mr-2"></i>上传数据
+            </button>
+            <button id="exportBtn" class="px-4 py-2 border border-tesla-red text-tesla-red rounded-lg hover:bg-tesla-red hover:text-white transition">
+                <i class="fas fa-download mr-2"></i>导出结果
+            </button>
+        </div>
+    </header>
+
+    <main class="container mx-auto py-8">
+        <!-- 核心指标卡片 -->
+        <div class="bento-grid">
+            <!-- 总样本量 -->
+            <div class="card col-span-3 row-span-1 gradient-border fade-in">
+                <h2 class="text-gray-400 text-sm mb-2"><i class="fas fa-chart-bar mr-2"></i>总样本量</h2>
+                <p class="text-4xl font-bold text-tesla-red">10</p>
+                <p class="text-gray-400 text-sm mt-2">分析样本总数</p>
+            </div>
+            
+            <!-- 情感分布 -->
+            <div class="card col-span-3 row-span-1 gradient-border fade-in">
+                <h2 class="text-gray-400 text-sm mb-2"><i class="fas fa-smile mr-2"></i>负面舆论</h2>
+                <p class="text-4xl font-bold text-tesla-red">100%</p>
+                <p class="text-gray-400 text-sm mt-2">全部为负面舆论</p>
+            </div>
+            
+            <!-- 高敏感度 -->
+            <div class="card col-span-3 row-span-1 gradient-border fade-in">
+                <h2 class="text-gray-400 text-sm mb-2"><i class="fas fa-exclamation-triangle mr-2"></i>高敏感度</h2>
+                <p class="text-4xl font-bold text-tesla-red">90%</p>
+                <p class="text-gray-400 text-sm mt-2">敏感度4级及以上</p>
+            </div>
+            
+            <!-- 高风险事件 -->
+            <div class="card col-span-3 row-span-1 gradient-border fade-in">
+                <h2 class="text-gray-400 text-sm mb-2"><i class="fas fa-radiation mr-2"></i>高风险事件</h2>
+                <p class="text-4xl font-bold text-tesla-red">100%</p>
+                <p class="text-gray-400 text-sm mt-2">全部为5级风险事件</p>
+            </div>
+            
+            <!-- 情感分布饼图 -->
+            <div class="card col-span-4 row-span-2 gradient-border fade-in">
+                <h2 class="text-gray-400 text-sm mb-4"><i class="fas fa-chart-pie mr-2"></i>情感分布</h2>
+                <div class="h-40">
+                    <canvas id="sentimentChart"></canvas>
+                </div>
+            </div>
+            
+            <!-- 来源分布 -->
+            <div class="card col-span-4 row-span-2 gradient-border fade-in">
+                <h2 class="text-gray-400 text-sm mb-4"><i class="fas fa-newspaper mr-2"></i>来源分布</h2>
+                <div class="h-40">
+                    <canvas id="sourceChart"></canvas>
+                </div>
+            </div>
+            
+            <!-- 事件类型分布 -->
+            <div class="card col-span-4 row-span-2 gradient-border fade-in">
+                <h2 class="text-gray-400 text-sm mb-4"><i class="fas fa-tags mr-2"></i>事件类型分布</h2>
+                <div class="h-40">
+                    <canvas id="eventTypeChart"></canvas>
+                </div>
+            </div>
+            
+            <!-- 关键词云 -->
+            <div class="card col-span-6 row-span-2 gradient-border fade-in">
+                <h2 class="text-gray-400 text-sm mb-4"><i class="fas fa-cloud mr-2"></i>关键词云</h2>
+                <div class="word-cloud h-40">
+                    <span class="word text-lg">造假</span>
+                    <span class="word text-lg">事件</span>
+                    <span class="word text-xl font-bold">安全</span>
+                    <span class="word text-sm">贪腐</span>
+                    <span class="word text-lg">公共</span>
+                    <span class="word text-sm">政策</span>
+                    <span class="word text-xl font-bold">污染</span>
+                    <span class="word text-sm">争议</span>
+                    <span class="word text-lg">事故</span>
+                    <span class="word text-sm">企业</span>
+                    <span class="word text-lg">违规</span>
+                    <span class="word text-sm">质量</span>
+                    <span class="word text-xl font-bold">诈骗</span>
+                    <span class="word text-sm">环保</span>
+                    <span class="word text-lg">数据</span>
+                    <span class="word text-sm">煤矿</span>
+                    <span class="word text-lg">腐败</span>
+                    <span class="word text-sm">排放</span>
+                </div>
+            </div>
+            
+            <!-- 高影响力报送人 -->
+            <div class="card col-span-6 row-span-2 gradient-border fade-in">
+                <h2 class="text-gray-400 text-sm mb-4"><i class="fas fa-user-tie mr-2"></i>高影响力报送人</h2>
+                <div class="overflow-y-auto h-40">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="text-left text-gray-400 border-b border-gray-700">
+                                <th class="pb-2">报送人</th>
+                                <th class="pb-2">报送数量</th>
+                                <th class="pb-2">平均风险</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b border-gray-800">
+                                <td class="py-2">中国电力报</td>
+                                <td class="py-2">1</td>
+                                <td class="py-2 text-tesla-red">5.0</td>
+                            </tr>
+                            <tr class="border-b border-gray-800">
+                                <td class="py-2">中国冶金报</td>
+                                <td class="py-2">1</td>
+                                <td class="py-2 text-tesla-red">5.0</td>
+                            </tr>
+                            <tr class="border-b border-gray-800">
+                                <td class="py-2">中国化工报</td>
+                                <td class="py-2">1</td>
+                                <td class="py-2 text-tesla-red">5.0</td>
+                            </tr>
+                            <tr class="border-b border-gray-800">
+                                <td class="py-2">中国煤炭报</td>
+                                <td class="py-2">1</td>
+                                <td class="py-2 text-tesla-red">5.0</td>
+                            </tr>
+                            <tr class="border-b border-gray-800">
+                                <td class="py-2">中国石化报</td>
+                                <td class="py-2">1</td>
+                                <td class="py-2 text-tesla-red">5.0</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- 样本列表 -->
+            <div class="card col-span-12 row-span-2 gradient-border fade-in">
+                <h2 class="text-gray-400 text-sm mb-4"><i class="fas fa-list mr-2"></i>样本列表 (前10条)</h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="text-left text-gray-400 border-b border-gray-700">
+                                <th class="pb-2">ID</th>
+                                <th class="pb-2">报送人</th>
+                                <th class="pb-2">事件名称</th>
+                                <th class="pb-2">分类</th>
+                                <th class="pb-2">风险等级</th>
+                                <th class="pb-2">敏感度</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b border-gray-800 hover:bg-gray-800">
+                                <td class="py-2">47</td>
+                                <td class="py-2">中国电力报</td>
+                                <td class="py-2">沙漠光伏基地骗补及安全事故事件</td>
+                                <td class="py-2">沙漠光伏基地骗补及安全事故事件</td>
+                                <td class="py-2 text-tesla-red">5</td>
+                                <td class="py-2 text-tesla-red">4</td>
+                            </tr>
+                            <tr class="border-b border-gray-800 hover:bg-gray-800">
+                                <td class="py-2">48</td>
+                                <td class="py-2">中国冶金报</td>
+                                <td class="py-2">宝武钢铁碳排放造假事件</td>
+                                <td class="py-2">公共安全事件-公共卫生</td>
+                                <td class="py-2 text-tesla-red">5</td>
+                                <td class="py-2 text-tesla-red">4</td>
+                            </tr>
+                            <tr class="border-b border-gray-800 hover:bg-gray-800">
+                                <td class="py-2">49</td>
+                                <td class="py-2">中国化工报</td>
+                                <td class="py-2">东营石化园区环保造假事件</td>
+                                <td class="py-2">东营石化园区环保造假事件</td>
+                                <td class="py-2 text-tesla-red">5</td>
+                                <td class="py-2 text-tesla-red">4</td>
+                            </tr>
+                            <tr class="border-b border-gray-800 hover:bg-gray-800">
+                                <td class="py-2">50</td>
+                                <td class="py-2">中国煤炭报</td>
+                                <td class="py-2">山西焦煤集团煤矿透水事故</td>
+                                <td class="py-2">公共安全事件-事故灾难,社会矛盾事件-劳资纠纷</td>
+                                <td class="py-2 text-tesla-red">5</td>
+                                <td class="py-2 text-tesla-red">4</td>
+                            </tr>
+                            <tr class="border-b border-gray-800 hover:bg-gray-800">
+                                <td class="py-2">51</td>
+                                <td class="py-2">中国石化报</td>
+                                <td class="py-2">安徽泾县游客遭围殴事件</td>
+                                <td class="py-2">公共安全事件-暴力冲突</td>
+                                <td class="py-2 text-tesla-red">5</td>
+                                <td class="py-2 text-tesla-red">4</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- 分析结论 -->
+            <div class="card col-span-12 row-span-1 gradient-border fade-in">
+                <h2 class="text-gray-400 text-sm mb-4"><i class="fas fa-lightbulb mr-2"></i>分析结论与建议</h2>
+                <p class="text-sm">当前数据集显示全部为高风险(5级)负面舆论事件，主要涉及企业造假、安全事故、贪腐问题。建议重点关注能源行业(电力、煤炭、石化)和制造业的监管合规问题，加强数据真实性核查和安全生产管理。</p>
+            </div>
+        </div>
+    </main>
+
+    <footer class="py-6 px-8 border-t border-gray-800 text-center text-gray-500 text-sm">
+        <p>数据来源: 用户提供的舆论数据 | 分析方法: 关键词匹配与统计分析</p>
+        <p class="mt-2">© 2023 舆论分析仪表盘 - 纯舆论分析平台</p>
+    </footer>
+
+    <script>
+        // 初始化图表
+        document.addEventListener('DOMContentLoaded', function() {
+            // 情感分布图表
+            const sentimentCtx = document.getElementById('sentimentChart').getContext('2d');
+            new Chart(sentimentCtx, {
+                type: 'pie',
+                data: {
+                    labels: ['负面', '中性', '正面'],
+                    datasets: [{
+                        data: [100, 0, 0],
+                        backgroundColor: [
+                            '#E31937',
+                            '#4B5563',
+                            '#10B981'
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: 'white'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // 来源分布图表
+            const sourceCtx = document.getElementById('sourceChart').getContext('2d');
+            new Chart(sourceCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['行业报纸', '其他来源'],
+                    datasets: [{
+                        label: '报道数量',
+                        data: [10, 0],
+                        backgroundColor: '#E31937',
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                color: 'white'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: 'white'
+                            },
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // 事件类型分布
+            const eventTypeCtx = document.getElementById('eventTypeChart').getContext('2d');
+            new Chart(eventTypeCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['安全事故', '
