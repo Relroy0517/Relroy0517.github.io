@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>社交媒体事件分析报告</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            background-color: #000000;
+            color: #ffffff;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+        .gradient-red {
+            background: linear-gradient(135deg, #E31937 0%, rgba(227, 25, 55, 0.3) 100%);
+        }
+        .border-red {
+            border: 1px solid #E31937;
+        }
+        .text-red {
+            color: #E31937;
+        }
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease-out;
+        }
+        .animate-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <div class="container mx-auto px-4 py-12">
+        <!-- 标题区域 -->
+        <div class="text-center mb-16 animate-on-scroll">
+            <h1 class="text-6xl md:text-8xl font-bold mb-4 text-white">社交媒体事件分析</h1>
+            <p class="text-xl md:text-2xl text-gray-300">基于X平台数据的深度舆情洞察</p>
+        </div>
+
+        <!-- 概览数据卡片 -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            <div class="gradient-red rounded-2xl p-6 text-center animate-on-scroll">
+                <i class="fas fa-exclamation-triangle text-4xl mb-4"></i>
+                <div class="text-5xl font-bold text-white">5</div>
+                <p class="text-gray-200">监测事件总数</p>
+            </div>
+            <div class="gradient-red rounded-2xl p-6 text-center animate-on-scroll">
+                <i class="fas fa-chart-line text-4xl mb-4"></i>
+                <div class="text-5xl font-bold text-white">6.8</div>
+                <p class="text-gray-200">平均风险评分</p>
+            </div>
+            <div class="gradient-red rounded-2xl p-6 text-center animate-on-scroll">
+                <i class="fas fa-shield-alt text-4xl mb-4"></i>
+                <div class="text-5xl font-bold text-white">3</div>
+                <p class="text-gray-200">高敏感事件数</p>
+            </div>
+        </div>
+
+        <!-- 风险分布饼图 -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
+            <div class="border-red rounded-2xl p-6 animate-on-scroll">
+                <h2 class="text-3xl font-bold mb-6 text-white">风险等级分布</h2>
+                <canvas id="riskPieChart" height="300"></canvas>
+            </div>
+            <div class="border-red rounded-2xl p-6 animate-on-scroll">
+                <h2 class="text-3xl font-bold mb-6 text-white">事件类型分析</h2>
+                <canvas id="typePieChart" height="300"></canvas>
+            </div>
+        </div>
+
+        <!-- 时间趋势图 -->
+        <div class="border-red rounded-2xl p-6 mb-16 animate-on-scroll">
+            <h2 class="text-3xl font-bold mb-6 text-white">事件时间分布趋势</h2>
+            <canvas id="timelineChart" height="400"></canvas>
+        </div>
+
+        <!-- 详细事件分析 -->
+        <div class="mb-16">
+            <h2 class="text-4xl font-bold mb-8 text-white text-center">事件详细分析</h2>
+            <div class="space-y-6">
+                <!-- 高风险事件 -->
+                <div class="border-red rounded-2xl p-6 animate-on-scroll">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-2xl font-bold text-red">高风险事件</span>
+                        <span class="text-red text-xl font-bold">风险评分: 8</span>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-2">邯郸市峰峰矿区砍人事件</h3>
+                    <p class="text-gray-300 mb-4">9月13日邯郸市峰峰矿区矿务局附近发生砍人事件致多人受伤</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="bg-red-500 px-3 py-1 rounded-full text-sm">公共安全事件</span>
+                        <span class="bg-red-500 px-3 py-1 rounded-full text-sm">暴力冲突</span>
+                    </div>
+                </div>
+
+                <!-- 中风险事件组 -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="border-red rounded-2xl p-6 animate-on-scroll">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-xl font-bold text-red">中高风险</span>
+                            <span class="text-red font-bold">风险评分: 7</span>
+                        </div>
+                        <h4 class="text-lg font-semibold text-white mb-2">尼泊尔封禁社交平台事件</h4>
+                        <p class="text-gray-300 text-sm">尼泊尔政府封禁26个社交平台，仅保留微信</p>
+                    </div>
+                    <div class="border-red rounded-2xl p-6 animate-on-scroll">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-xl font-bold text-red">中高风险</span>
+                            <span class="text-red font-bold">风险评分: 7</span>
+                        </div>
+                        <h4 class="text-lg font-semibold text-white mb-2">云南元江言论管控事件</h4>
+                        <p class="text-gray-300 text-sm">男子因朋友圈质疑教育局长被行政拘留4日</p>
+                    </div>
+                </div>
+
+                <!-- 低风险事件 -->
+                <div class="border-red rounded-2xl p-6 animate-on-scroll">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-xl font-bold text-red">中风险事件</span>
+                        <span class="text-red font-bold">风险评分: 5</span>
+                    </div>
+                    <h3 class="text-lg font-semibold text-white mb-2">河北科技大学推免暗箱操作事件</h3>
+                    <p class="text-gray-300">学生抗议环工学院推免过程不透明</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 来源分析 -->
+        <div class="border-red rounded-2xl p-6 mb-16 animate-on-scroll">
+            <h2 class="text-3xl font-bold mb-6 text-white">信息来源分析</h2>
+            <div class="text-center">
+                <div class="text-5xl font-bold text-red mb-4">100%</div>
+                <p class="text-gray-300 text-xl">来自X平台单一信源</p>
+                <p class="text-gray-400 mt-2">所有监测事件均来自同一Twitter账号报送</p>
+            </div>
+        </div>
+
+        <!-- 总结分析 -->
+        <div class="border-red rounded-2xl p-8 text-center animate-on-scroll">
+            <h2 class="text-3xl font-bold mb-6 text-white">分析总结</h2>
+            <div class="text-lg text-gray-300 leading-relaxed">
+                <p class="mb-4">监测期间共发现5起敏感事件，平均风险评分6.8，显示整体舆情环境处于中等风险水平。</p>
+                <p class="mb-4">事件类型主要集中在公共安全事件和政策敏感事件，其中暴力冲突和网络审查类事件风险等级较高。</p>
+                <p>建议加强相关平台的舆情监控，重点关注高风险事件的后续发展态势。</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 滚动动画
+        document.addEventListener('DOMContentLoaded', function() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.animate-on-scroll').forEach(el => {
+                observer.observe(el);
+            });
+
+            // 风险分布饼图
+            const riskCtx = document.getElementById('riskPieChart').getContext('2d');
+            new Chart(riskCtx, {
+                type: 'pie',
+                data: {
+                    labels: ['高风险 (8分)', '中高风险 (7分)', '中风险 (5分)'],
+                    datasets: [{
+                        data: [1, 3, 1],
+                        backgroundColor: ['#E31937', '#FF6B6B', '#FFA8A8'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#ffffff'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // 事件类型饼图
+            const typeCtx = document.getElementById('typePieChart').getContext('2d');
+            new Chart(typeCtx, {
+                type: 'pie',
+                data: {
+                    labels: ['公共安全事件', '政策敏感事件', '社会矛盾事件'],
+                    datasets: [{
+                        data: [2, 2, 1],
+                        backgroundColor: ['#E31937', '#FF6B6B', '#FFA8A8'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#ffffff'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // 时间趋势图
+            const timelineCtx = document.getElementById('timelineChart').getContext('2d');
+            new Chart(timelineCtx, {
+                type: 'line',
+                data: {
+                    labels: ['9月1日', '9月9日', '9月13日'],
+                    datasets: [{
+                        label: '风险事件数量',
+                        data: [1, 1, 1],
+                        borderColor: '#E31937',
+                        backgroundColor: 'rgba(227, 25, 55, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: '#ffffff'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: '#ffffff'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#ffffff'
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
