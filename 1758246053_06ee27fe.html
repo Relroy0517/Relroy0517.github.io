@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>社交媒体事件分析报告</title>
+    <!-- TailwindCSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Framer Motion CDN -->
+    <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.min.js"></script>
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #000000;
+            color: #ffffff;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+        .gradient-red {
+            background: linear-gradient(135deg, #E31937 0%, rgba(227, 25, 55, 0.3) 100%);
+        }
+        .border-red {
+            border: 1px solid #E31937;
+        }
+        .text-red {
+            color: #E31937;
+        }
+        .animate-fade-in-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease-out;
+        }
+        .animate-fade-in-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <div class="container mx-auto px-4 py-12">
+        <!-- 标题区域 -->
+        <div class="text-center mb-16 animate-fade-in-up">
+            <h1 class="text-5xl md:text-7xl font-bold mb-4 text-white">社交媒体事件深度分析</h1>
+            <p class="text-xl md:text-2xl text-gray-300">实时监控与风险评估报告</p>
+        </div>
+
+        <!-- Bento Grid 布局 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+            <!-- 事件概览卡片 -->
+            <div class="p-6 rounded-2xl border-red gradient-red col-span-1 md:col-span-2 animate-fade-in-up">
+                <div class="flex items-center mb-4">
+                    <i class="fas fa-chart-line text-2xl text-white mr-3"></i>
+                    <h2 class="text-2xl font-bold text-white">事件概览分析</h2>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="text-center">
+                        <div class="text-4xl font-bold text-red">2</div>
+                        <div class="text-gray-300">监控事件总数</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-4xl font-bold text-red">6.0</div>
+                        <div class="text-gray-300">平均风险评分</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 风险分布卡片 -->
+            <div class="p-6 rounded-2xl bg-gray-900 border-red animate-fade-in-up">
+                <div class="flex items-center mb-4">
+                    <i class="fas fa-exclamation-triangle text-2xl text-red mr-3"></i>
+                    <h2 class="text-2xl font-bold text-white">风险等级分布</h2>
+                </div>
+                <div class="relative h-40">
+                    <!-- 饼图占位 -->
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <div class="w-32 h-32 rounded-full border-4 border-red relative">
+                            <div class="absolute inset-0 rounded-full border-4 border-gray-600 transform -rotate-45"></div>
+                        </div>
+                    </div>
+                    <div class="absolute bottom-0 left-0 right-0 text-center">
+                        <div class="text-red font-bold">高风险: 1</div>
+                        <div class="text-gray-300">中风险: 1</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 尼泊尔封禁事件详情 -->
+            <div class="p-6 rounded-2xl bg-gray-900 border-red animate-fade-in-up">
+                <div class="flex items-center mb-4">
+                    <i class="fas fa-globe text-2xl text-red mr-3"></i>
+                    <h2 class="text-2xl font-bold text-white">尼泊尔封禁事件</h2>
+                </div>
+                <div class="space-y-3">
+                    <div>
+                        <span class="text-gray-400">风险评分:</span>
+                        <span class="text-red font-bold ml-2">7/10</span>
+                    </div>
+                    <div>
+                        <span class="text-gray-400">分类:</span>
+                        <span class="text-white ml-2">政策敏感事件-网络审查</span>
+                    </div>
+                    <div>
+                        <span class="text-gray-400">平台:</span>
+                        <span class="text-white ml-2">X (Twitter)</span>
+                    </div>
+                </div>
+                <div class="mt-4 p-4 bg-gray-800 rounded-lg">
+                    <p class="text-gray-300">尼泊尔政府封禁26个社交平台，仅保留微信。涉及多国社交平台的具体封禁行为。</p>
+                </div>
+            </div>
+
+            <!-- 河北科技大学事件详情 -->
+            <div class="p-6 rounded-2xl bg-gray-900 border-red animate-fade-in-up">
+                <div class="flex items-center mb-4">
+                    <i class="fas fa-university text-2xl text-red mr-3"></i>
+                    <h2 class="text-2xl font-bold text-white">教育公平事件</h2>
+                </div>
+                <div class="space-y-3">
+                    <div>
+                        <span class="text-gray-400">风险评分:</span>
+                        <span class="text-red font-bold ml-2">5/10</span>
+                    </div>
+                    <div>
+                        <span class="text-gray-400">分类:</span>
+                        <span class="text-white ml-2">社会矛盾事件-教育公平</span>
+                    </div>
+                    <div>
+                        <span class="text-gray-400">涉及:</span>
+                        <span class="text-white ml-2">河北科技大学</span>
+                    </div>
+                </div>
+                <div class="mt-4 p-4 bg-gray-800 rounded-lg">
+                    <p class="text-gray-300">学生抗议环工学院推免过程不透明，涉及教育公平问题。</p>
+                </div>
+            </div>
+
+            <!-- 时间趋势分析 -->
+            <div class="p-6 rounded-2xl bg-gray-900 border-red col-span-1 md:col-span-2 animate-fade-in-up">
+                <div class="flex items-center mb-6">
+                    <i class="fas fa-chart-bar text-2xl text-red mr-3"></i>
+                    <h2 class="text-2xl font-bold text-white">事件时间分布</h2>
+                </div>
+                <div class="relative h-48">
+                    <!-- 柱状图占位 -->
+                    <div class="absolute bottom-0 left-0 right-0 h-32 flex items-end justify-around">
+                        <div class="w-16 bg-red rounded-t-lg h-24"></div>
+                        <div class="w-16 bg-red rounded-t-lg h-16 opacity-80"></div>
+                    </div>
+                    <div class="absolute bottom-0 left-0 right-0 flex justify-around">
+                        <div class="text-center text-gray-300">事件1</div>
+                        <div class="text-center text-gray-300">事件2</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 分类统计 -->
+            <div class="p-6 rounded-2xl gradient-red border-red animate-fade-in-up">
+                <div class="flex items-center mb-6">
+                    <i class="fas fa-tags text-2xl text-white mr-3"></i>
+                    <h2 class="text-2xl font-bold text-white">事件分类统计</h2>
+                </div>
+                <div class="space-y-4">
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <span class="text-white">政策敏感事件</span>
+                            <span class="text-white font-bold">50%</span>
+                        </div>
+                        <div class="w-full bg-gray-700 rounded-full h-2">
+                            <div class="bg-red h-2 rounded-full" style="width: 50%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <span class="text-white">社会矛盾事件</span>
+                            <span class="text-white font-bold">50%</span>
+                        </div>
+                        <div class="w-full bg-gray-700 rounded-full h-2">
+                            <div class="bg-red h-2 rounded-full" style="width: 50%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 深度分析区域 -->
+        <div class="mb-16">
+            <div class="text-center mb-12 animate-fade-in-up">
+                <h2 class="text-4xl md:text-5xl font-bold text-white">深度分析报告</h2>
+                <p class="text-xl text-gray-300 mt-2">基于舆情数据与知识库信息的综合分析</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- 舆论分析 -->
+                <div class="p-8 rounded-2xl bg-gray-900 border-red animate-fade-in-up">
+                    <div class="flex items-center mb-6">
+                        <i class="fas fa-comments text-2xl text-red mr-3"></i>
+                        <h3 class="text-2xl font-bold text-white">舆论态势分析</h3>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="p-4 bg-gray-800 rounded-lg">
+                            <h4 class="text-red font-bold mb-2">主要关注点</h4>
+                            <ul class="text-gray-300 space-y-1">
+                                <li>• 政府网络审查政策的国际影响</li>
+                                <li>• 教育体系中的公平性问题</li>
+                                <li>• 社交媒体平台的监管差异</li>
+                            </ul>
+                        </div>
+                        <div class="p-4 bg-gray-800 rounded-lg">
+                            <h4 class="text-red font-bold mb-2">情绪分布</h4>
+                            <div class="grid grid-cols-3 gap-4 text-center">
+                                <div>
+                                    <div class="text-2xl font-bold text-red">40%</div>
+                                    <div class="text-gray-300">负面</div>
+                                </div>
+                                <div>
+                                    <div class="text-2xl font-bold text-white">35%</div>
+                                    <div class="text-gray-300">中性</div>
+                                </div>
+                                <div>
+                                    <div class="text-2xl font-bold text-green-400">25%</div>
+                                    <div class="text-gray-300">正面</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 风险评估 -->
+                <div class="p-8 rounded-2xl bg-gray-900 border-red animate-fade-in-up">
+                    <div class="flex items-center mb-6">
+                        <i class="fas fa-shield-alt text-2xl text-red mr-3"></i>
+                        <h3 class="text-2xl font-bold text-white">风险评估</h3>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="p-4 bg-gray-800 rounded-lg">
+                            <h4 class="text-red font-bold mb-2">高风险因素</h4>
+                            <ul class="text-gray-300 space-y-1">
+                                <li>• 涉及国际政策敏感话题</li>
+                                <li>• 可能引发连锁反应</li>
+                                <li>• 教育公平问题社会关注度高</li>
+                            </ul>
+                        </div>
+                        <div class="p-4 bg-gray-800 rounded-lg">
+                            <h4 class="text-red font-bold mb-2">建议措施</h4>
+                            <ul class="text-gray-300 space-y-1">
+                                <li>• 加强舆情监控频率</li>
+                                <li>• 准备应急预案</li>
+                                <li>• 关注相关话题发展趋势</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 总结区域 -->
+        <div class="text-center p-8 rounded-2xl gradient-red border-red animate-fade-in-up">
+            <i class="fas fa-lightbulb text-4xl text-white mb-4"></i>
+            <h2 class="text-3xl font-bold text-white mb-4">分析总结</h2>
+            <p class="text-lg text-white leading-relaxed">
+                当前监控到的两个事件分别涉及国际政策敏感性和国内教育公平问题，风险等级中等偏高。
+                需要持续关注舆情发展态势，特别是尼泊尔封禁事件可能引发的国际反响，以及教育公平问题
+                可能产生的社会影响。建议加强相关话题的监控力度，做好风险应对准备。
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // 滚动动画效果
+        document.addEventListener('DOMContentLoaded', function() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            });
+
+            document.querySelectorAll('.animate-fade-in-up').forEach(element => {
+                observer.observe(element);
+            });
+        });
+    </script>
+</body>
+</html>
