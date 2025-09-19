@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>舆情事件分析报告</title>
+    <!-- TailwindCSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Framer Motion CDN -->
+    <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.js"></script>
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #000000;
+            color: #ffffff;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 20px;
+            padding: 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid rgba(227, 25, 55, 0.3);
+            backdrop-filter: blur(10px);
+        }
+        .gradient-red {
+            background: linear-gradient(135deg, #E31937 0%, rgba(227, 25, 55, 0.1) 100%);
+        }
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: #E31937;
+        }
+        .chart-container {
+            height: 200px;
+            position: relative;
+        }
+        .bar {
+            position: absolute;
+            bottom: 0;
+            background: #E31937;
+            border-radius: 4px 4px 0 0;
+            transition: all 0.3s ease;
+        }
+        .pie-chart {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            background: conic-gradient(
+                #E31937 0% 40%,
+                #ff6b6b 40% 65%,
+                #ff9e7d 65% 85%,
+                #ffd166 85% 100%
+            );
+        }
+        .word-cloud {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+        }
+        .word {
+            padding: 4px 12px;
+            background: rgba(227, 25, 55, 0.2);
+            border-radius: 20px;
+            border: 1px solid #E31937;
+        }
+    </style>
+</head>
+<body>
+    <div class="min-h-screen">
+        <!-- 头部标题 -->
+        <div class="text-center py-20">
+            <h1 class="text-6xl font-bold mb-4 text-white">舆情事件分析报告</h1>
+            <p class="text-xl text-gray-400">基于社交媒体数据的深度洞察</p>
+        </div>
+
+        <!-- Bento Grid 布局 -->
+        <div class="bento-grid">
+            <!-- 事件概览卡片 -->
+            <div class="card col-span-12 gradient-red">
+                <div class="flex items-center mb-6">
+                    <i class="fas fa-chart-line text-2xl text-white mr-3"></i>
+                    <h2 class="text-2xl font-bold text-white">事件概览</h2>
+                </div>
+                <div class="grid grid-cols-4 gap-6">
+                    <div class="text-center">
+                        <div class="stat-number">4</div>
+                        <p class="text-gray-300">总事件数量</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="stat-number">6.8</div>
+                        <p class="text-gray-300">平均风险等级</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="stat-number">3</div>
+                        <p class="text-gray-300">高风险事件</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="stat-number">1.8</div>
+                        <p class="text-gray-300">平均敏感度</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 风险分布饼图 -->
+            <div class="card col-span-4">
+                <div class="flex items-center mb-6">
+                    <i class="fas fa-chart-pie text-2xl text-[#E31937] mr-3"></i>
+                    <h2 class="text-2xl font-bold text-white">风险等级分布</h2>
+                </div>
+                <div class="flex justify-center items-center">
+                    <div class="pie-chart"></div>
+                </div>
+                <div class="mt-4 space-y-2">
+                    <div class="flex items-center">
+                        <div class="w-4 h-4 bg-[#E31937] rounded mr-2"></div>
+                        <span class="text-gray-300">高风险 (8级): 1件</span>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="w-4 h-4 bg-[#ff6b6b] rounded mr-2"></div>
+                        <span class="text-gray-300">中高风险 (7级): 2件</span>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="w-4 h-4 bg-[#ff9e7d] rounded mr-2"></div>
+                        <span class="text-gray-300">中风险 (5级): 1件</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 事件类型分析 -->
+            <div class="card col-span-4">
+                <div class="flex items-center mb-6">
+                    <i class="fas fa-tags text-2xl text-[#E31937] mr-3"></i>
+                    <h2 class="text-2xl font-bold text-white">事件类型分析</h2>
+                </div>
+                <div class="chart-container">
+                    <div class="bar" style="left: 20px; width: 40px; height: 120px;"></div>
+                    <div class="bar" style="left: 80px; width: 40px; height: 80px;"></div>
+                    <div class="bar" style="left: 140px; width: 40px; height: 60px;"></div>
+                </div>
+                <div class="mt-4 grid grid-cols-3 gap-2 text-center">
+                    <div class="text-gray-300">公共安全</div>
+                    <div class="text-gray-300">政策敏感</div>
+                    <div class="text-gray-300">社会矛盾</div>
+                </div>
+            </div>
+
+            <!-- 时间趋势分析 -->
+            <div class="card col-span-4">
+                <div class="flex items-center mb-6">
+                    <i class="fas fa-calendar-alt text-2xl text-[#E31937] mr-3"></i>
+                    <h2 class="text-2xl font-bold text-white">时间趋势</h2>
+                </div>
+                <div class="chart-container">
+                    <div class="bar" style="left: 20px; width: 30px; height: 80px;"></div>
+                    <div class="bar" style="left: 60px; width: 30px; height: 100px;"></div>
+                    <div class="bar" style="left: 100px; width: 30px; height: 120px;"></div>
+                    <div class="bar" style="left: 140px; width: 30px; height: 60px;"></div>
+                </div>
+                <div class="mt-4 grid grid-cols-4 gap-2 text-center text-sm text-gray-300">
+                    <div>9/9</div>
+                    <div>9/10</div>
+                    <div>9/13</div>
+                    <div>近期</div>
+                </div>
+            </div>
+
+            <!-- 详细事件列表 -->
+            <div class="card col-span-6">
+                <div class="flex items-center mb-6">
+                    <i class="fas fa-list-alt text-2xl text-[#E31937] mr-3"></i>
+                    <h2 class="text-2xl font-bold text-white">事件详情</h2>
+                </div>
+                <div class="space-y-4">
+                    <div class="border-b border-gray-700 pb-4">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-lg font-semibold text-white">邯郸市峰峰矿区砍人事件</h3>
+                            <span class="px-3 py-1 bg-[#E31937] rounded-full text-sm">风险等级: 8</span>
+                        </div>
+                        <p class="text-gray-400 mb-2">9月13日邯郸市峰峰矿区矿务局附近发生砍人事件致多人受伤</p>
+                        <div class="flex items-center text-sm text-gray-500">
+                            <i class="fas fa-tag mr-2"></i>
+                            <span>公共安全事件-暴力冲突</span>
+                        </div>
+                    </div>
+                    
+                    <div class="border-b border-gray-700 pb-4">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-lg font-semibold text-white">尼泊尔封禁社交平台事件</h3>
+                            <span class="px-3 py-1 bg-[#ff6b6b] rounded-full text-sm">风险等级: 7</span>
+                        </div>
+                        <p class="text-gray-400 mb-2">尼泊尔政府封禁26个社交平台，仅保留微信</p>
+                        <div class="flex items-center text-sm text-gray-500">
+                            <i class="fas fa-tag mr-2"></i>
+                            <span>政策敏感事件-网络审查</span>
+                        </div>
+                    </div>
+                    
+                    <div class="border-b border-gray-700 pb-4">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-lg font-semibold text-white">尼泊尔前总理妻子纵火案</h3>
+                            <span class="px-3 py-1 bg-[#ff6b6b] rounded-full text-sm">风险等级: 7</span>
+                        </div>
+                        <p class="text-gray-400 mb-2">9月9日加德满都，尼泊尔前总理妻子遭人纵火身亡</p>
+                        <div class="flex items-center text-sm text-gray-500">
+                            <i class="fas fa-tag mr-2"></i>
+                            <span>公共安全事件-暴力冲突</span>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-lg font-semibold text-white">河北科技大学推免暗箱操作事件</h3>
+                            <span class="px-3 py-1 bg-[#ff9e7d] rounded-full text-sm">风险等级: 5</span>
+                        </div>
+                        <p class="text-gray-400 mb-2">学生抗议环工学院推免过程不透明</p>
+                        <div class="flex items-center text-sm text-gray-500">
+                            <i class="fas fa-tag mr-2"></i>
+                            <span>社会矛盾事件-教育公平</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 关键词词云 -->
+            <div class="card col-span-6">
+                <div class="flex items-center mb-6">
+                    <i class="fas fa-cloud text-2xl text-[#E31937] mr-3"></i>
+                    <h2 class="text-2xl font-bold text-white">关键词分析</h2>
+                </div>
+                <div class="word-cloud">
+                    <span class="word text-lg">暴力冲突</span>
+                    <span class="word text-base">网络审查</span>
+                    <span class="word text-lg">砍人事件</span>
+                    <span class="word text-sm">推免暗箱</span>
+                    <span class="word text-base">纵火案</span>
+                    <span class="word text-lg">公共安全</span>
+                    <span class="word text-base">政策敏感</span>
+                    <span class="word text-sm">教育公平</span>
+                    <span class="word text-base">社会矛盾</span>
+                    <span class="word text-lg">风险事件</span>
+                </div>
+            </div>
+
+            <!-- 来源分析 -->
+            <div class="card col-span-6">
+                <div class="flex items-center mb-6">
+                    <i class="fas fa-share-alt text-2xl text-[#E31937] mr-3"></i>
+                    <h2 class="text-2xl font-bold text-white">信息来源分析</h2>
+                </div>
+                <div class="flex items-center justify-center h-32">
+                    <div class="text-center">
+                        <i class="fab fa-twitter text-4xl text-[#1DA1F2] mb-2"></i>
+                        <p class="text-gray-300">所有信息均来自 X (Twitter)</p>
+                        <p class="text-gray-400 text-sm">@whyyoutouzhele 为主要报送人</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 总结分析 -->
+            <div class="card col-span-6 gradient-red">
+                <div class="flex items-center mb-6">
+                    <i class="fas fa-lightbulb text-2xl text-white mr-3"></i>
+                    <h2 class="text-2xl font-bold text-white">分析总结</h2>
+                </div>
+                <div class="space-y-3 text-gray-200">
+                    <p>• 近期舆情以公共安全事件为主，占比50%</p>
+                    <p>• 高风险事件（7级以上）占总数的75%，需重点关注</p>
+                    <p>• 事件地域分布：2起国际事件（尼泊尔），2起国内事件</p>
+                    <p>• 主要风险类型：暴力冲突、政策敏感、社会矛盾</p>
+                    <p>• 信息来源单一，全部来自Twitter平台</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 使用Framer Motion实现滚动动画
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.card');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = 1;
+                        entry.target.style.transform = 'translateY(0)';
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+
+            cards.forEach(card => {
+                card.style.opacity = 0;
+                card.style.transform = 'translateY(50px)';
+                card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(card);
+            });
+
+            // 数字计数动画
+            const stats = document.querySelectorAll('.stat-number');
+            stats.forEach(stat => {
+                const target = parseFloat(stat.textContent);
+                let current = 0;
+                const duration = 2000;
+                const steps = 60;
+                const increment = target / steps;
+                
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= target) {
+                        current = target;
+                        clearInterval(timer);
+                    }
+                    stat.textContent = current.toFixed(1);
+                }, duration / steps);
+            });
+        });
+    </script>
+</body>
+</html>
