@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>社会舆情事件分析报告</title>
+    <!-- TailwindCSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Framer Motion CDN -->
+    <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.js"></script>
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #000000;
+            color: #ffffff;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            grid-auto-rows: minmax(200px, auto);
+            gap: 20px;
+            padding: 40px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid rgba(227, 25, 55, 0.3);
+            backdrop-filter: blur(10px);
+        }
+        .highlight-red {
+            color: #E31937;
+        }
+        .gradient-red {
+            background: linear-gradient(135deg, rgba(227, 25, 55, 0.2), transparent);
+        }
+        .chart-container {
+            height: 300px;
+            position: relative;
+        }
+        .bar-chart {
+            display: flex;
+            align-items: end;
+            height: 100%;
+            gap: 15px;
+        }
+        .bar {
+            background: linear-gradient(to top, #E31937, rgba(227, 25, 55, 0.6));
+            border-radius: 4px 4px 0 0;
+            min-width: 30px;
+            transition: height 1s ease;
+        }
+        .pie-chart {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: conic-gradient(
+                #E31937 0% 40%,
+                rgba(227, 25, 55, 0.7) 40% 65%,
+                rgba(227, 25, 55, 0.5) 65% 85%,
+                rgba(227, 25, 55, 0.3) 85% 100%
+            );
+        }
+        .trend-line {
+            height: 200px;
+            position: relative;
+            border-left: 1px solid #666;
+            border-bottom: 1px solid #666;
+        }
+        .line-path {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            stroke: #E31937;
+            stroke-width: 3;
+            fill: none;
+        }
+        .word-cloud {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            align-items: center;
+            min-height: 200px;
+        }
+        .word {
+            padding: 6px 12px;
+            border-radius: 20px;
+            background: rgba(227, 25, 55, 0.2);
+            border: 1px solid rgba(227, 25, 55, 0.5);
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <div class="bento-grid">
+        <!-- 标题区域 -->
+        <div class="card col-span-12 gradient-red flex items-center justify-center">
+            <div class="text-center">
+                <h1 class="text-6xl font-bold mb-4">社会舆情事件<span class="highlight-red">分析报告</span></h1>
+                <p class="text-xl text-gray-300">基于社交媒体数据的深度洞察与风险评估</p>
+            </div>
+        </div>
+
+        <!-- 事件概览统计 -->
+        <div class="card col-span-4">
+            <div class="flex items-center mb-6">
+                <i class="fas fa-chart-line text-2xl highlight-red mr-3"></i>
+                <h2 class="text-2xl font-bold">事件概览</h2>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <div class="text-center">
+                    <div class="text-4xl font-bold highlight-red">4</div>
+                    <div class="text-sm text-gray-400">监测事件总数</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl font-bold highlight-red">5.75</div>
+                    <div class="text-sm text-gray-400">平均风险评分</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl font-bold highlight-red">3</div>
+                    <div class="text-sm text-gray-400">高敏感事件</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl font-bold highlight-red">2.75</div>
+                    <div class="text-sm text-gray-400">平均敏感度</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 风险分布饼图 -->
+        <div class="card col-span-4">
+            <div class="flex items-center mb-6">
+                <i class="fas fa-exclamation-triangle text-2xl highlight-red mr-3"></i>
+                <h2 class="text-2xl font-bold">风险等级分布</h2>
+            </div>
+            <div class="flex justify-center items-center h-48">
+                <div class="pie-chart"></div>
+            </div>
+            <div class="grid grid-cols-2 gap-2 mt-4 text-sm">
+                <div><span class="highlight-red">●</span> 高风险 (7级): 1件</div>
+                <div><span class="text-orange-400">●</span> 中风险 (6级): 2件</div>
+                <div><span class="text-yellow-400">●</span> 低风险 (4级): 1件</div>
+            </div>
+        </div>
+
+        <!-- 事件类型分析 -->
+        <div class="card col-span-4">
+            <div class="flex items-center mb-6">
+                <i class="fas fa-tags text-2xl highlight-red mr-3"></i>
+                <h2 class="text-2xl font-bold">事件类型分析</h2>
+            </div>
+            <div class="chart-container">
+                <div class="bar-chart">
+                    <div class="bar" style="height: 80%">
+                        <div class="text-center text-xs mt-2">社会矛盾</div>
+                    </div>
+                    <div class="bar" style="height: 70%">
+                        <div class="text-center text-xs mt-2">政策敏感</div>
+                    </div>
+                    <div class="bar" style="height: 40%">
+                        <div class="text-center text-xs mt-2">劳资纠纷</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 详细事件列表 -->
+        <div class="card col-span-6">
+            <div class="flex items-center mb-6">
+                <i class="fas fa-list text-2xl highlight-red mr-3"></i>
+                <h2 class="text-2xl font-bold">事件详情分析</h2>
+            </div>
+            <div class="space-y-6">
+                <!-- 事件1 -->
+                <div class="border-l-4 border-red-500 pl-4">
+                    <div class="flex justify-between items-start">
+                        <h3 class="text-xl font-semibold">广东揭阳农田非法占用事件</h3>
+                        <span class="bg-red-500 text-white px-2 py-1 rounded text-sm">风险等级: 7</span>
+                    </div>
+                    <p class="text-gray-300 mt-2">村民举报卫星影像显示农田保护地实为水泥地基，以香蕉掩人耳目</p>
+                    <div class="flex gap-4 mt-2 text-sm">
+                        <span class="text-red-400"><i class="fas fa-map-marker-alt mr-1"></i>普宁市</span>
+                        <span class="text-blue-400"><i class="fas fa-clock mr-1"></i>2025-09-17</span>
+                        <span class="text-green-400"><i class="fas fa-tag mr-1"></i>征地拆迁</span>
+                    </div>
+                </div>
+
+                <!-- 事件2 -->
+                <div class="border-l-4 border-orange-500 pl-4">
+                    <div class="flex justify-between items-start">
+                        <h3 class="text-xl font-semibold">TikTok技术出口政策争议</h3>
+                        <span class="bg-orange-500 text-white px-2 py-1 rounded text-sm">风险等级: 6</span>
+                    </div>
+                    <p class="text-gray-300 mt-2">《人民日报》重申中国依法审批TikTok技术出口及知识产权事宜</p>
+                    <div class="flex gap-4 mt-2 text-sm">
+                        <span class="text-red-400"><i class="fas fa-newspaper mr-1"></i>官方媒体</span>
+                        <span class="text-blue-400"><i class="fas fa-clock mr-1"></i>2025-09-17</span>
+                        <span class="text-green-400"><i class="fas fa-tag mr-1"></i>政策争议</span>
+                    </div>
+                </div>
+
+                <!-- 事件3 -->
+                <div class="border-l-4 border-orange-500 pl-4">
+                    <div class="flex justify-between items-start">
+                        <h3 class="text-xl font-semibold">中建四局强制观看阅兵事件</h3>
+                        <span class="bg-orange-500 text-white px-2 py-1 rounded text-sm">风险等级: 6</span>
+                    </div>
+                    <p class="text-gray-300 mt-2">中建四局要求欠薪工友强制观看阅兵并合影</p>
+                    <div class="flex gap-4 mt-2 text-sm">
+                        <span class="text-red-400"><i class="fas fa-building mr-1"></i>中建四局</span>
+                        <span class="text-blue-400"><i class="fas fa-clock mr-1"></i>2025-09-01</span>
+                        <span class="text-green-400"><i class="fas fa-tag mr-1"></i>劳资纠纷</span>
+                    </div>
+                </div>
+
+                <!-- 事件4 -->
+                <div class="border-l-4 border-yellow-500 pl-4">
+                    <div class="flex justify-between items-start">
+                        <h3 class="text-xl font-semibold">211大学教材强制使用事件</h3>
+                        <span class="bg-yellow-500 text-white px-2 py-1 rounded text-sm">风险等级: 4</span>
+                    </div>
+                    <p class="text-gray-300 mt-2">中国大陆某211大学要求课程必须使用马工程教材</p>
+                    <div class="flex gap-4 mt-2 text-sm">
+                        <span class="text-red-400"><i class="fas fa-graduation-cap mr-1"></i>高等教育</span>
+                        <span class="text-blue-400"><i class="fas fa-clock mr-1"></i>2025-09-17</span>
+                        <span class="text-green-400"><i class="fas fa-tag mr-1"></i>政策争议</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 时间趋势分析 -->
+        <div class="card col-span-6">
+            <div class="flex items-center mb-6">
+                <i class="fas fa-chart-line text-2xl highlight-red mr-3"></i>
+                <h2 class="text-2xl font-bold">时间趋势分析</h2>
+            </div>
+            <div class="trend-line">
+                <svg class="line-path" viewBox="0 0 400 200">
+                    <path d="M0,180 C100,150 150,100 200,120 C250,140 300,80 400,100" 
+                          stroke="#E31937" stroke-width="3" fill="none"/>
+                </svg>
+            </div>
+            <div class="flex justify-between text-xs text-gray-400 mt-2">
+                <span>9月1日</span>
+                <span>9月5日</span>
+                <span>9月10日</span>
+                <span>9月15日</span>
+                <span>9月17日</span>
+            </div>
+        </div>
+
+        <!-- 关键词词云 -->
+        <div class="card col-span-6">
+            <div class="flex items-center mb-6">
+                <i class="fas fa-cloud text-2xl highlight-red mr-3"></i>
+                <h2 class="text-2xl font-bold">热点关键词</h2>
+            </div>
+            <div class="word-cloud">
+                <span class="word text-lg">农田占用</span>
+                <span class="word text-xl">政策争议</span>
+                <span class="word text-lg">劳资纠纷</span>
+                <span class="word text-sm">教材强制</span>
+                <span class="word text-xl">社会矛盾</span>
+                <span class="word text-lg">官方媒体</span>
+                <span class="word text-sm">技术出口</span>
+                <span class="word text-lg">欠薪问题</span>
+                <span class="word text-sm">高等教育</span>
+            </div>
+        </div>
+
+        <!-- 平台来源分析 -->
+        <div class="card col-span-6">
+            <div class="flex items-center mb-6">
+                <i class="fas fa-share-alt text-2xl highlight-red mr-3"></i>
+                <h2 class="text-2xl font-bold">信息来源平台</h2>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <div class="text-center p-4 border border-red-500 rounded-lg">
+                    <i class="fab fa-twitter text-4xl text-blue-400 mb-2"></i>
+                    <div class="text-2xl font-bold highlight-red">3</div>
+                    <div class="text-sm text-gray-400">Twitter/X</div>
+                </div>
+                <div class="text-center p-4 border border-red-500 rounded-lg">
+                    <i class="fas fa-comment text-4xl text-green-400 mb-2"></i>
+                    <div class="text-2xl font-bold highlight-red">1</div>
+                    <div class="text-sm text-gray-400">社交媒体</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 总结分析 -->
+        <div class="card col-span-12 gradient-red">
+            <div class="flex items-center mb-6">
+                <i class="fas fa-chart-pie text-2xl highlight-red mr-3"></i>
+                <h2 class="text-2xl font-bold">综合分析结论</h2>
+            </div>
+            <div class="grid grid-cols-2 gap-8">
+                <div>
+                    <h3 class="text-xl font-semibold mb-4 highlight-red">主要发现</h3>
+                    <ul class="space-y-2 text-gray-300">
+                        <li><i class="fas fa-check-circle text-red-400 mr-2"></i>社会矛盾事件占比最高，达50%</li>
+                        <li><i class="fas fa-check-circle text-red-400 mr-2"></i>政策敏感类事件呈现上升趋势</li>
+                        <li><i class="fas fa-check-circle text-red-400 mr-2"></i>Twitter/X是主要信息传播平台</li>
+                        <li><i class="fas fa-check-circle text-red-400 mr-2"></i>9月中旬事件爆发频率增加</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-4 highlight-red">风险提示</h3>
+                    <ul class="space-y-2 text-gray-300">
+                        <li><i class="fas fa-exclamation-triangle text-red-400 mr-2"></i>征地拆迁类事件风险等级最高</li>
+                        <li><i class="fas fa-exclamation-triangle text-red-400 mr-2"></i>政策争议可能引发连锁反应</li>
+                        <li><i class="fas fa-exclamation-triangle text-red-400 mr-2"></i>教育领域事件需持续关注</li>
+                        <li><i class="fas fa-exclamation-triangle text-red-400 mr-2"></i>劳资纠纷存在社会化扩散风险</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 使用Framer Motion实现滚动动画
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.card');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = 1;
+                        entry.target.style.transform = 'translateY(0)';
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+
+            cards.forEach(card => {
+                card.style.opacity = 0;
+                card.style.transform = 'translateY(50px)';
+                card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(card);
+            });
+
+            // 模拟图表动画
+            setTimeout(() => {
+                document.querySelectorAll('.bar').forEach(bar => {
+                    bar.style.height = bar.style.height;
+                });
+            }, 500);
+        });
+    </script>
+</body>
+</html>
