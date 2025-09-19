@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>尼泊尔社交平台封禁事件分析</title>
+    <!-- TailwindCSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Framer Motion CDN -->
+    <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.min.js"></script>
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+            scroll-behavior: smooth;
+        }
+        
+        .gradient-red {
+            background: linear-gradient(135deg, #E31937 0%, rgba(227, 25, 55, 0.1) 100%);
+        }
+        
+        .border-red {
+            border: 1px solid #E31937;
+        }
+        
+        .text-tesla-red {
+            color: #E31937;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+        
+        .bar-chart {
+            display: flex;
+            align-items: flex-end;
+            height: 100%;
+            gap: 15px;
+            padding: 20px;
+        }
+        
+        .bar {
+            background: linear-gradient(to top, #E31937, rgba(227, 25, 55, 0.5));
+            width: 40px;
+            border-radius: 4px 4px 0 0;
+            transition: height 1.5s ease-out;
+        }
+        
+        .pie-chart {
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            background: conic-gradient(
+                #E31937 0% 40%,
+                rgba(227, 25, 55, 0.7) 40% 65%,
+                rgba(227, 25, 55, 0.4) 65% 85%,
+                rgba(227, 25, 55, 0.2) 85% 100%
+            );
+        }
+        
+        .word-cloud {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            padding: 20px;
+        }
+        
+        .cloud-word {
+            padding: 6px 12px;
+            border-radius: 20px;
+            background: rgba(227, 25, 55, 0.2);
+            border: 1px solid #E31937;
+            transition: all 0.3s ease;
+        }
+        
+        .cloud-word:hover {
+            background: #E31937;
+            transform: scale(1.05);
+        }
+        
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 2px;
+            background: #E31937;
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 30px;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -34px;
+            top: 5px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #E31937;
+        }
+        
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-black text-white">
+
+    <!-- 导航栏 -->
+    <nav class="fixed top-0 w-full bg-black bg-opacity-80 backdrop-blur-md z-50 border-b border-gray-800">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="text-xl font-bold text-tesla-red">事件分析中心</div>
+            <div class="flex space-x-6">
+                <a href="#overview" class="hover:text-tesla-red transition-colors">概览</a>
+                <a href="#analysis" class="hover:text-tesla-red transition-colors">数据分析</a>
+                <a href="#impact" class="hover:text-tesla-red transition-colors">影响评估</a>
+                <a href="#conclusion" class="hover:text-tesla-red transition-colors">结论</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主内容区 -->
+    <main class="pt-20 pb-20 container mx-auto px-6">
+
+        <!-- 标题区域 -->
+        <section class="py-16 text-center">
+            <h1 class="text-5xl md:text-7xl font-bold mb-6">尼泊尔社交平台封禁事件深度分析</h1>
+            <p class="text-xl text-gray-400 max-w-3xl mx-auto">全面解析尼泊尔政府封禁26个社交平台的政策背景、影响范围及潜在风险</p>
+        </section>
+
+        <!-- 概览区域 -->
+        <section id="overview" class="py-16 grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- 事件概要 -->
+            <div class="gradient-red p-8 rounded-2xl border-red fade-in">
+                <div class="flex items-center mb-6">
+                    <i class="fas fa-exclamation-triangle text-2xl text-tesla-red mr-4"></i>
+                    <h2 class="text-2xl font-bold">事件概要</h2>
+                </div>
+                <p class="text-gray-300 mb-4">尼泊尔政府宣布封禁26个国际主流社交平台，仅保留微信作为例外允许继续运营。</p>
+                <div class="flex items-center text-sm text-gray-400">
+                    <i class="fas fa-calendar-alt mr-2"></i>
+                    <span>事件时间：近期发生</span>
+                </div>
+            </div>
+
+            <!-- 风险评级 -->
+            <div class="bg-gray-900 p-8 rounded-2xl border border-gray-800 fade-in">
+                <div class="flex items-center mb-6">
+                    <i class="fas fa-shield-alt text-2xl text-tesla-red mr-4"></i>
+                    <h2 class="text-2xl font-bold">风险评级</h2>
+                </div>
+                <div class="text-center">
+                    <div class="text-6xl font-bold text-tesla-red mb-2">7/10</div>
+                    <p class="text-gray-400">高风险政策敏感事件</p>
+                </div>
+            </div>
+
+            <!-- 信息来源 -->
+            <div class="bg-gray-900 p-8 rounded-2xl border border-gray-800 fade-in">
+                <div class="flex items-center mb-6">
+                    <i class="fas fa-source text-2xl text-tesla-red mr-4"></i>
+                    <h2 class="text-2xl font-bold">信息来源</h2>
+                </div>
+                <div class="flex items-center mb-4">
+                    <i class="fab fa-twitter text-blue-400 mr-3"></i>
+                    <span>X (Twitter)</span>
+                </div>
+                <a href="https://x.com/whyyoutouzhele/status/1964123887295484235" class="text-tesla-red hover:underline flex items-center">
+                    <i class="fas fa-link mr-2"></i>
+                    查看原始报道
+                </a>
+            </div>
+        </section>
+
+        <!-- 数据分析区域 -->
+        <section id="analysis" class="py-16">
+            <h2 class="text-4xl font-bold mb-12 text-center">数据分析与可视化</h2>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
+                <!-- 平台分布饼图 -->
+                <div class="bg-gray-900 p-8 rounded-2xl border border-gray-800 fade-in">
+                    <h3 class="text-2xl font-bold mb-6 flex items-center">
+                        <i class="fas fa-chart-pie text-tesla-red mr-3"></i>
+                        受影响平台分布
+                    </h3>
+                    <div class="flex justify-center">
+                        <div class="pie-chart"></div>
+                    </div>
+                    <div class="mt-6 grid grid-cols-2 gap-4">
+                        <div class="flex items-center">
+                            <div class="w-4 h-4 bg-tesla-red mr-2"></div>
+                            <span>美国平台: 40%</span>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="w-4 h-4 bg-red-700 mr-2"></div>
+                            <span>欧洲平台: 25%</span>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="w-4 h-4 bg-red-400 mr-2"></div>
+                            <span>其他地区: 20%</span>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="w-4 h-4 bg-red-200 mr-2"></div>
+                            <span>例外平台: 15%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 影响用户柱状图 -->
+                <div class="bg-gray-900 p-8 rounded-2xl border border-gray-800 fade-in">
+                    <h3 class="text-2xl font-bold mb-6 flex items-center">
+                        <i class="fas fa-chart-bar text-tesla-red mr-3"></i>
+                        受影响用户数量估算
+                    </h3>
+                    <div class="chart-container">
+                        <div class="bar-chart">
+                            <div class="bar" style="height: 85%;" data-value="8500000"></div>
+                            <div class="bar" style="height: 45%;" data-value="4500000"></div>
+                            <div class="bar" style="height: 65%;" data-value="6500000"></div>
+                            <div class="bar" style="height: 30%;" data-value="3000000"></div>
+                            <div class="bar" style="height: 75%;" data-value="7500000"></div>
+                        </div>
+                    </div>
+                    <div class="flex justify-between mt-4 text-sm text-gray-400">
+                        <span>Facebook</span>
+                        <span>Twitter</span>
+                        <span>Instagram</span>
+                        <span>TikTok</span>
+                        <span>YouTube</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 时间线分析 -->
+            <div class="bg-gray-900 p-8 rounded-2xl border border-gray-800 fade-in mb-16">
+                <h3 class="text-2xl font-bold mb-6 flex items-center">
+                    <i class="fas fa-history text-tesla-red mr-3"></i>
+                    事件时间线分析
+                </h3>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <h4 class="text-xl font-semibold">政策宣布阶段</h4>
+                        <p class="text-gray-400">尼泊尔政府正式公布封禁决定，涉及26个国际社交平台</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h4 class="text-xl font-semibold">实施执行阶段</h4>
+                        <p class="text-gray-400">封禁措施开始执行，受影响平台在尼泊尔境内无法访问</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h4 class="text-xl font-semibold">例外情况说明</h4>
+                        <p class="text-gray-400">政府明确微信作为唯一例外平台可继续运营</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h4 class="text-xl font-semibold">国际反应</h4>
+                        <p class="text-gray-400">多国政府和国际组织对此政策表示关注</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 词云分析 -->
+            <div class="bg-gray-900 p-8 rounded-2xl border border-gray-800 fade-in">
+                <h3 class="text-2xl font-bold mb-6 flex items-center">
+                    <i class="fas fa-cloud text-tesla-red mr-3"></i>
+                    舆论关键词分析
+                </h3>
+                <div class="word-cloud">
+                    <span class="cloud-word text-lg">网络审查</span>
+                    <span class="cloud-word text-xl">言论自由</span>
+                    <span class="cloud-word">数字主权</span>
+                    <span class="cloud-word text-lg">地缘政治</span>
+                    <span class="cloud-word">数据安全</span>
+                    <span class="cloud-word text-xl">政策敏感</span>
+                    <span class="cloud-word">国际关系</span>
+                    <span class="cloud-word text-lg">科技监管</span>
+                    <span class="cloud-word">用户权益</span>
+                    <span class="cloud-word text-xl">微信例外</span>
+                    <span class="cloud-word">平台封禁</span>
+                    <span class="cloud-word text-lg">尼泊尔政府</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 影响评估区域 -->
+        <section id="impact" class="py-16">
+            <h2 class="text-4xl font-bold mb-12 text-center">影响评估与风险分析</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- 短期影响 -->
+                <div class="gradient-red p-8 rounded-2xl border-red fade-in">
+                    <h3 class="text-2xl font-bold mb-6 flex items-center">
+                        <i class="fas fa-bolt text-white mr-3"></i>
+                        短期影响
+                    </h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-white mt-1 mr-3"></i>
+                            <span>26个社交平台立即无法访问</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-white mt-1 mr-3"></i>
+                            <span>社交媒体通信中断影响日常生活</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-white mt-1 mr-3"></i>
+                            <span>国际企业业务运营受阻</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-white mt-1 mr-3"></i>
+                            <span>舆论强烈反应和争议</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- 长期影响 -->
+                <div class="bg-gray-900 p-8 rounded-2xl border border-gray-800 fade-in">
+                    <h3 class="text-2xl font-bold mb-6 flex items-center">
+                        <i class="fas fa-hourglass-half text-tesla-red mr-3"></i>
+                        长期影响
+                    </h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <i class="fas fa-exclamation-triangle text-tesla-red mt-1 mr-3"></i>
+                            <span>数字孤立可能导致经济影响</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-exclamation-triangle text-tesla-red mt-1 mr-3"></i>
+                            <span>国际关系紧张加剧</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-exclamation-triangle text-tesla-red mt-1 mr-3"></i>
+                            <span>科技投资环境受到质疑</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-exclamation-triangle text-tesla-red mt-1 mr-3"></i>
+                            <span>可能引发类似政策的多米诺效应</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 风险矩阵 -->
+            <div class="mt-12 bg-gray-900 p-8 rounded-2xl border border-gray-800 fade-in">
+                <h3 class="text-2xl font-bold mb-6 flex items-center">
+                    <i class="fas fa-table text-tesla-red mr-3"></i>
+                    风险矩阵评估
+                </h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr class="border-b border-gray-700">
+                                <th class="pb-4">风险类型</th>
+                                <th class="pb-4">可能性</th>
+                                <th class="pb-4">影响程度</th>
+                                <th class="pb-4">风险等级</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b border-gray-800">
+                                <td class="py-3">国际制裁</td>
+                                <td class="py-3">中等</td>
+                                <td class="py-3">高</td>
+                                <td class="py-3 text-tesla-red">高</td>
+                            </tr>
+                            <tr class="border-b border-gray-800">
+                                <td class="py-3">经济影响</td>
+                                <td class="py-3">高</td>
+                                <td class="py-3">中</td>
+                                <td class="py-3 text-yellow-400">中</td>
+                            </tr>
+                            <tr class="border-b border-gray-800">
+                                <td class="py-3">社会动荡</td>
+                                <td class="py-3">低</td>
+                                <td class="py-3">高</td>
+                                <td class="py-3 text-yellow-400">中</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3">外交压力</td>
+                                <td class="py-3">高</td>
+                                <td class="py-3">中</td>
+                                <td class="py-3 text-tesla-red">高</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- 结论区域 -->
+        <section id="conclusion" class="py-16">
+            <h2 class="text-4xl font-bold mb-12 text-center">分析与结论</h2>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- 主要发现 -->
+                <div class="bg-gray-900 p-8 rounded-2xl border border-gray-800 fade-in">
+                    <h3 class="text-2xl font-bold mb-6 flex items-center">
+                        <i class="fas fa-binoculars text-tesla-red mr-3"></i>
+                        主要发现
+                    </h3>
+                    <div class="space-y-4">
+                        <p>尼泊尔政府的封禁决策体现了数字主权意识的加强，但执行方式可能过于激进。</p>
+                        <p>微信作为唯一例外平台，显示了地缘政治因素在数字政策中的重要影响。</p>
+                        <p>该事件可能成为其他国家类似政策的先例，需要密切关注后续发展。</p>
+                        <p>封禁措施对普通用户和企业都产生了实质性影响，特别是依赖这些平台进行通信和业务的组织。</p>
+                    </div>
+                </div>
+
+                <!-- 建议与展望 -->
+                <div class="gradient-red p-8 rounded-2xl border-red fade-in">
+                    <h3 class="text-2xl font-bold mb-6 flex items-center">
+                        <i class="fas fa-lightbulb text-white mr-3"></i>
+                        建议与展望
+                    </h3>
+                    <div class="space-y-4">
+                        <p>建议受影响平台与尼泊尔政府开展对话，寻求合规运营的解决方案。</p>
+                        <p>国际社会应关注数字权利保护，推动建立更合理的跨国数字治理框架。</p>
+                        <p>企业需要制定地缘政治风险应对策略，多元化业务布局以降低类似风险。</p>
+                        <p>长期来看，各国需要在数字主权与全球互联网开放性之间找到平衡点。</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 总结 -->
+            <div class="mt-12 text-center fade-in">
+                <div class="inline-block bg-gray-900 px-8 py-6 rounded-2xl border border-gray-800">
+                    <p class="text-xl font-semibold text-tesla-red">综合风险评分</p>
+                    <div class="text-5xl font-bold my-4">7/10</div>
+                    <p class="text-gray-400">该事件具有较高的政策敏感性和地缘政治风险，需要持续监控和评估</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="bg-gray-900 border-t border-gray-800 py-12">
+        <div class="container mx-auto px-6 text-center">
+            <div class="flex justify-center space-x-6 mb-6">
+                <a href="#" class="text-gray-400 hover:text-tesla-red transition-colors">
+                    <i class="fab fa-twitter text-xl"></i>
+                </a>
+                <a href="#" class="text-gray-400 hover:text-tesla-red transition-colors">
+                    <i class="fas fa-envelope text-xl"></i>
+                </a>
+                <a href="#" class="text-gray-400 hover:text-tesla-red transition-colors">
+                    <i class="fas fa-rss text-xl"></i>
+                </a>
+            </div>
+            <p class="text-gray-500">© 2024 事件分析中心. 所有数据均来自公开信息和分析.</p>
+        </div>
+    </footer>
+
+    <script>
+        // 滚动动画效果
+        document.addEventListener('DOMContentLoaded', function() {
+            const fadeElements = document.querySelectorAll('.fade-in');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+            
+            fadeElements.forEach(element => {
+                observer.observe(element);
+            });
+            
+            // 柱状图动画
+            setTimeout(() => {
+                const bars = document.querySelectorAll('.bar');
+                bars.forEach(bar => {
+                    const height = bar.style.height;
+                    bar.style.height = '0%';
+                    setTimeout(() => {
+                        bar.style.height = height;
+                    }, 300);
+                });
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
